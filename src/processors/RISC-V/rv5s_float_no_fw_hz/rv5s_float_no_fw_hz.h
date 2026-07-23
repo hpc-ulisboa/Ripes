@@ -43,7 +43,7 @@ public:
   RV5S_FLOAT_NO_FW_HZ(const ExtensionSetInfo &extensions)
       : RipesVSRTLProcessor("5-Stage floating point RISC-V Processor without "
                             "forwarding or hazard detection") {
-    RV_ExtensionSet exts{dynamic_cast<const RV_ExtensionSet &>(extensions)};
+    RV_ExtensionSet exts(extensions);
     exts << Extension::F; // enforce F extension, since the processor is
                           // designed to work with if
 

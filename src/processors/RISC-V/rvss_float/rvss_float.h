@@ -32,7 +32,7 @@ class RVSS_FLOAT : public RipesVSRTLProcessor {
 public:
   RVSS_FLOAT(const ExtensionSetInfo &extensions)
       : RipesVSRTLProcessor("Single Cycle RISC-V floating point Processor") {
-    RV_ExtensionSet exts{dynamic_cast<const RV_ExtensionSet &>(extensions)};
+    RV_ExtensionSet exts(extensions);
     exts << Extension::F; // enforce F extension, since the processor is
                           // designed to work with it
 
