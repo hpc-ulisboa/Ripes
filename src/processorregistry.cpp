@@ -4,6 +4,8 @@
 
 #include "processors/RISC-V/rv5mc/rv5mc_1m.h"
 #include "processors/RISC-V/rv5mc/rv5mc_2m.h"
+#include "processors/RISC-V/rv5mc_1m_f/rv5mc_1m_f.h"
+#include "processors/RISC-V/rv5mc_1m_f/rv5mc_2m_f.h"
 #include "processors/RISC-V/rv5s/rv5s.h"
 #include "processors/RISC-V/rv5s_float/rv5s_float.h"
 #include "processors/RISC-V/rv5s_float/rv5s_float_no_fw.h"
@@ -84,6 +86,18 @@ constexpr const char rv5mc_desc_1m[] =
     "This version takes advantage of the fact that data and instructions are "
     "never accessed in the same cycle to use a single memory for data and "
     "instructions.";
+
+constexpr const char rv5mc1mf_desc[] =
+    "A 5 stage multicycle processor with F extension support. "
+    "Instructions take a variable number of cycles to execute. "
+    "This version uses a single memory for data and instructions, "
+    "and includes a floating point unit for single-precision FP operations.";
+
+constexpr const char rv5mc2mf_desc[] =
+    "A 5 stage multicycle processor with F extension support. "
+    "Instructions take a variable number of cycles to execute. "
+    "This version uses separate memories for data and instructions, "
+    "and includes a floating point unit for single-precision FP operations.";
 
 static const RegisterInitialization defaultRegVals = {
     {RVISA::GPR, {{2, 0x7ffffff0}, {3, 0x10000000}}}};
@@ -184,6 +198,52 @@ static ProcClassInfo register_rv_mc() {
       {"Two Memories"}, layouts, defaultRegVals);
 
   return rv_mc_info;
+}
+
+static ProcClassInfo register_rv_mc1mf() {
+  std::vector<Layout> layouts;
+
+  ProcClassInfo rv_mc1mf_info(ProcessorID::RV_5MC1MF, ISA::RV32I,
+                              QStringLiteral("Multi-cycle RISC-V (F ext)"),
+                              Variations::RV_5MC1MF::RV32F_1M);
+
+  layouts = {{"Extended",
+              ":/layouts/RISC-V/rv5mc/rv5mc_1m_extended_layout.json",
+              {{{0, 0}, QPointF{0.08, 0}},
+               {{0, 1}, QPointF{0.28, 0}},
+               {{0, 2}, QPointF{0.54, 0}},
+               {{0, 3}, QPointF{0.78, 0}},
+               {{0, 4}, QPointF{0.9, 0}}}}};
+
+  add32And64BitVariations<vsrtl::core::RV5MC1MF>(
+      rv_mc1mf_info, "Multi-cycle F extension processor with one memory",
+      rv5mc1mf_desc, Variations::RV_5MC1MF::RV32F_1M,
+      Variations::RV_5MC1MF::RV64F_1M, {}, layouts, defaultRegVals);
+
+  return rv_mc1mf_info;
+}
+
+static ProcClassInfo register_rv_mc2mf() {
+  std::vector<Layout> layouts;
+
+  ProcClassInfo rv_mc2mf_info(ProcessorID::RV_5MC2MF, ISA::RV32I,
+                              QStringLiteral("Multi-cycle RISC-V (F ext, 2M)"),
+                              Variations::RV_5MC2MF::RV32F_2M);
+
+  layouts = {{"Extended",
+              ":/layouts/RISC-V/rv5mc/rv5mc_extended_layout.json",
+              {{{0, 0}, QPointF{0.08, 0}},
+               {{0, 1}, QPointF{0.28, 0}},
+               {{0, 2}, QPointF{0.54, 0}},
+               {{0, 3}, QPointF{0.78, 0}},
+               {{0, 4}, QPointF{0.9, 0}}}}};
+
+  add32And64BitVariations<vsrtl::core::RV5MC2MF>(
+      rv_mc2mf_info, "Multi-cycle F extension processor with separate memories",
+      rv5mc2mf_desc, Variations::RV_5MC2MF::RV32F_2M,
+      Variations::RV_5MC2MF::RV64F_2M, {"Two Memories"}, layouts, defaultRegVals);
+
+  return rv_mc2mf_info;
 }
 
 static ProcClassInfo register_rv_5s() {
@@ -425,6 +485,8 @@ static ProcClassInfo register_rv_6s() {
 ProcessorRegistry::ProcessorRegistry() {
   addProcessor(register_rv_ss());
   addProcessor(register_rv_mc());
+  addProcessor(register_rv_mc1mf());
+  addProcessor(register_rv_mc2mf());
   addProcessor(register_rv_5s());
   addProcessor(register_rv_6s());
 }

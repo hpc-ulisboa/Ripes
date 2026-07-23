@@ -31,6 +31,8 @@ inline QString enumToString<uint>(uint value) {
 enum ProcessorID {
   RV_SS,
   RV_5MC,
+  RV_5MC1MF,
+  RV_5MC2MF,
   RV_5S,
   RV_6S_DUAL,
   NUM_PROCESSORS
@@ -62,6 +64,14 @@ VARIATION_ENUM(RV_5MC,
   RV32I_2M, /* 32-Bit 2 Memory */
   RV64I_1M, /* 64-Bit 1 Memory */
   RV64I_2M  /* 64-Bit 2 Memory */
+)
+VARIATION_ENUM(RV_5MC1MF, 
+  RV32F_1M, /* 32-Bit 1 Memory with F extension */
+  RV64F_1M  /* 64-Bit 1 Memory with F extension */
+)
+VARIATION_ENUM(RV_5MC2MF, 
+  RV32F_2M, /* 32-Bit 2 Memory with F extension */
+  RV64F_2M  /* 64-Bit 2 Memory with F extension */
 )
 VARIATION_ENUM(RV_5S, 
   // FU = with Forward unit
