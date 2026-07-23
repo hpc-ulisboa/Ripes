@@ -5,6 +5,9 @@
 #include "processors/RISC-V/rv5mc/rv5mc_1m.h"
 #include "processors/RISC-V/rv5mc/rv5mc_2m.h"
 #include "processors/RISC-V/rv5s/rv5s.h"
+#include "processors/RISC-V/rv5s_float/rv5s_float.h"
+#include "processors/RISC-V/rv5s_float/rv5s_float_no_fw.h"
+#include "processors/RISC-V/rv5s_float/rv5s_float_no_hz.h"
 #include "processors/RISC-V/rv5s_float_no_fw_hz/rv5s_float_no_fw_hz.h"
 #include "processors/RISC-V/rv5s_no_fw/rv5s_no_fw.h"
 #include "processors/RISC-V/rv5s_no_fw_hz/rv5s_no_fw_hz.h"
@@ -37,6 +40,17 @@ constexpr const char rv5s_float_no_fw_hz_desc[] =
     "A 5-stage in-order processor with additional floating point unit but with "
     "no forwarding or hazard "
     "detection/elimination." no_hz_note;
+
+constexpr const char rv5s_float_no_hz_desc[] =
+    "A 5-stage in-order processor with floating point unit and forwarding but "
+    "no hazard "
+    "detection/elimination." no_hz_note;
+constexpr const char rv5s_float_no_fw_desc[] =
+    "A 5-stage in-order processor with floating point unit and hazard "
+    "detection but no forwarding.";
+constexpr const char rv5s_float_desc[] =
+    "A 5-stage in-order processor with floating point unit, hazard "
+    "detection, and forwarding.";
 
 constexpr const char rv5s_no_hz_desc[] =
     "A 5-stage in-order processor with forwarding but no hazard "
@@ -230,6 +244,85 @@ static ProcClassInfo register_rv_5s() {
       "5-stage floating point processor w/o forwarding or hazard detection",
       rv5s_float_no_fw_hz_desc, Variations::RV_5S::RV32F,
       Variations::RV_5S::RV64F, {}, layouts, defaultRegVals);
+
+  //------------------------------------------------------------------------------
+  // RISC-V 5-stage floating point without hazard detection (with forwarding)
+  //------------------------------------------------------------------------------
+  layouts = {{"Standard",
+              ":/layouts/RISC-V/rv5s_float_no_fw_hz/"
+              "rv5s_float_no_fw_hz_standard_layout.json",
+              {{{0, 0}, QPointF{0.08, 0}},
+               {{0, 1}, QPointF{0.35, 0}},
+               {{0, 2}, QPointF{0.60, 0}},
+               {{0, 3}, QPointF{0.76, 0}},
+               {{0, 4}, QPointF{0.90, 0}}}},
+             {"Extended",
+              ":/layouts/RISC-V/rv5s_float_no_fw_hz/"
+              "rv5s_float_no_fw_hz_extended_layout.json",
+              {{{0, 0}, QPointF{0.08, 0.0}},
+               {{0, 1}, QPointF{0.32, 0.0}},
+               {{0, 2}, QPointF{0.59, 0.0}},
+               {{0, 3}, QPointF{0.78, 0.0}},
+               {{0, 4}, QPointF{0.91, 0.0}}}}};
+  add32And64BitVariations<vsrtl::core::RV5S_FLOAT_NO_HZ>(
+      rv5s_info,
+      "5-stage floating point processor w/o hazard detection",
+      rv5s_float_no_hz_desc, Variations::RV_5S::RV32F_FU,
+      Variations::RV_5S::RV64F_FU, {option_Forwarding}, layouts,
+      defaultRegVals);
+
+  //------------------------------------------------------------------------------
+  // RISC-V 5-stage floating point without forwarding unit (with hazard
+  // detection)
+  //------------------------------------------------------------------------------
+  layouts = {{"Standard",
+              ":/layouts/RISC-V/rv5s_float_no_fw_hz/"
+              "rv5s_float_no_fw_hz_standard_layout.json",
+              {{{0, 0}, QPointF{0.08, 0}},
+               {{0, 1}, QPointF{0.35, 0}},
+               {{0, 2}, QPointF{0.60, 0}},
+               {{0, 3}, QPointF{0.76, 0}},
+               {{0, 4}, QPointF{0.90, 0}}}},
+             {"Extended",
+              ":/layouts/RISC-V/rv5s_float_no_fw_hz/"
+              "rv5s_float_no_fw_hz_extended_layout.json",
+              {{{0, 0}, QPointF{0.08, 0.0}},
+               {{0, 1}, QPointF{0.32, 0.0}},
+               {{0, 2}, QPointF{0.59, 0.0}},
+               {{0, 3}, QPointF{0.78, 0.0}},
+               {{0, 4}, QPointF{0.91, 0.0}}}}};
+  add32And64BitVariations<vsrtl::core::RV5S_FLOAT_NO_FW>(
+      rv5s_info,
+      "5-stage floating point processor w/o forwarding unit",
+      rv5s_float_no_fw_desc, Variations::RV_5S::RV32F_HU,
+      Variations::RV_5S::RV64F_HU, {option_Hazard}, layouts,
+      defaultRegVals);
+
+  //------------------------------------------------------------------------------
+  // RISC-V 5-stage floating point with forwarding and hazard detection
+  //------------------------------------------------------------------------------
+  layouts = {{"Standard",
+              ":/layouts/RISC-V/rv5s_float_no_fw_hz/"
+              "rv5s_float_no_fw_hz_standard_layout.json",
+              {{{0, 0}, QPointF{0.08, 0}},
+               {{0, 1}, QPointF{0.35, 0}},
+               {{0, 2}, QPointF{0.60, 0}},
+               {{0, 3}, QPointF{0.76, 0}},
+               {{0, 4}, QPointF{0.90, 0}}}},
+             {"Extended",
+              ":/layouts/RISC-V/rv5s_float_no_fw_hz/"
+              "rv5s_float_no_fw_hz_extended_layout.json",
+              {{{0, 0}, QPointF{0.08, 0.0}},
+               {{0, 1}, QPointF{0.32, 0.0}},
+               {{0, 2}, QPointF{0.59, 0.0}},
+               {{0, 3}, QPointF{0.78, 0.0}},
+               {{0, 4}, QPointF{0.91, 0.0}}}}};
+  add32And64BitVariations<vsrtl::core::RV5S_FLOAT>(
+      rv5s_info,
+      "5-stage floating point processor",
+      rv5s_float_desc, Variations::RV_5S::RV32F_FU_HU,
+      Variations::RV_5S::RV64F_FU_HU, {option_Hazard, option_Forwarding},
+      layouts, defaultRegVals);
 
   //------------------------------------------------------------------------------
   // RISC-V 5-stage without hazard detection (with forwarding)

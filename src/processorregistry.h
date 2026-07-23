@@ -28,7 +28,13 @@ inline QString enumToString<uint>(uint value) {
 // =============================== Processors =================================
 // The order of the ProcessorID enum defines the order of which the processors
 // will appear in the processor selection dialog.
-enum ProcessorID { RV_SS, RV_5MC, RV_5S, RV_6S_DUAL, NUM_PROCESSORS };
+enum ProcessorID {
+  RV_SS,
+  RV_5MC,
+  RV_5S,
+  RV_6S_DUAL,
+  NUM_PROCESSORS
+};
 Q_ENUM_NS(ProcessorID); // Register with the metaobject system
 
 // ------------------------------- Variations ---------------------------------
@@ -68,9 +74,9 @@ VARIATION_ENUM(RV_5S,
   RV32I,
 
   /* 32-Bit Floating Point Variations */
-  // RV32F_FU_HU,
-  // RV32F_FU,
-  // RV32F_HU,
+  RV32F_FU_HU,
+  RV32F_FU,
+  RV32F_HU,
   RV32F,
 
   /* 64-Bit Integer Variations */
@@ -80,9 +86,9 @@ VARIATION_ENUM(RV_5S,
   RV64I,
 
   /* 64-Bit Floating Point Variations */
-  // RV64F_FU_HU,
-  // RV64F_FU,
-  // RV64F_HU,
+  RV64F_FU_HU,
+  RV64F_FU,
+  RV64F_HU,
   RV64F
 )
 VARIATION_ENUM(RV_6S_DUAL,  RV32I, RV64I )
