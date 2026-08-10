@@ -1,59 +1,62 @@
-# Ripes
-[![Windows / Qt 6.5.0](https://github.com/mortbopet/Ripes/actions/workflows/windows-release.yml/badge.svg)](https://github.com/mortbopet/Ripes/actions/workflows/windows-release.yml)
-[![Mac release / Qt 6.5.0](https://github.com/mortbopet/Ripes/actions/workflows/mac-release.yml/badge.svg)](https://github.com/mortbopet/Ripes/actions/workflows/mac-release.yml)
-[![Ubuntu release 16.04 / Qt 6.5.0](https://github.com/mortbopet/Ripes/actions/workflows/linux-release.yml/badge.svg)](https://github.com/mortbopet/Ripes/actions/workflows/linux-release.yml)
-[![WASM / Qt 6.6.0](https://github.com/mortbopet/Ripes/actions/workflows/wasm-release.yml/badge.svg?branch=master)](https://github.com/mortbopet/Ripes/actions/workflows/wasm-release.yml)
-[![Gitter](https://badges.gitter.im/Ripes-VSRTL/Ripes.svg)](https://gitter.im/Ripes-VSRTL/)
+# Ripes — IST Fork (RISC-V F-Extension)
 
-Ripes is a visual computer architecture simulator and assembly code editor built for the [RISC-V instruction set architecture](https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf).
+![image](docs/images/Ripes_fp.png)
 
-For questions, comments, feature requests, or new ideas, don't hesitate to share these at the [discussions page](https://github.com/mortbopet/Ripes/discussions).  
-For bugs or issues, please report these at the [issues page](https://github.com/mortbopet/Ripes/issues).
 
-<p align="center">
-    <img src="https://github.com/mortbopet/Ripes/blob/master/resources/images/animation.gif?raw=true" />
-</p>
+This is a fork of [Ripes](https://github.com/mortbopet/Ripes), a visual computer architecture simulator and assembly code editor for the [RISC-V instruction set architecture](https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf).
 
-## Usage
-Ripes may be used to explore concepts such as:
-- How machine code is executed on a variety of microarchitectures (RV32IMC/RV64IMC based)
-- How different cache designs influence performance
-- How C and assembly code is compiled and assembled to executable machine code
-- How a processor interacts with memory-mapped I/O
+For general Ripes usage, installation, and build instructions, see the [upstream README](https://github.com/mortbopet/Ripes/blob/master/README.md) and [documentation](https://github.com/mortbopet/Ripes/blob/master/docs/README.md) — this file only covers what's specific to this fork.
 
-If this is your first time using Ripes, please refer to the [introduction/tutorial](docs/introduction.md).  
-For further information, please refer to the [Ripes documentation](docs/README.md).
+**Repository:** https://github.com/hpc-ulisboa/Ripes/tree/f_extension
 
-## Downloading & Installation
-Prebuilt binaries are available for Linux, Windows & Mac through the [Releases page](https://github.com/mortbopet/Ripes/releases).  
+**Course adoption:** starting 2026/2027, this fork will be used in the **Computer Architecture** course at [Instituto Superior Técnico (IST)](https://tecnico.ulisboa.pt/).
 
-### Linux
-Releases for Linux are distributed in the AppImage format. To run an AppImage:
-* Run `chmod a+x` on the AppImage file
-* Run the file!
-The AppImage for Linux should be compatible with most Linux distributions.
+## What this fork adds
 
-### Windows
-For Windows, the C++ runtime library must be available (if not, a msvcp140.dll error will be produced). You most likely already have this installed, but if this is not the case, you download it [here](https://www.microsoft.com/en-us/download/details.aspx?id=48145).
+This fork implements the **RISC-V F-extension** (single-precision floating-point) & **D-Extension** (double-precision floating-point) as part of a master's thesis, integrated into Ripes's existing pipeline and memory model. For the full instruction reference (including fused multiply-add, conversion, compare, and pseudo instructions), see docs/f-extension.md.
+
+| Feature                                | Description                                                                                                       | Status      |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------- |
+| F-Extension for Single Cycle Processor | Adds F-extension floating-point instruction support to Ripes's single-cycle RISC-V processor model                | Implemented |
+| FCSR Extension                         | Adds the floating-point control and status register (`fcsr`), including rounding mode and exception flag support  | Implemented |
+| F-Extension for Pipelined Processors   | Adds F-extension support to Ripes's pipelined processor models, including handling of floating-point data hazards | Implemented |
+| F-Extension for Multi-cycle Processors | Adds F-extension support to Ripes's multi-cycle processor model                                                   | In testing  |
+| D-Extension                            | Adds double-precision floating-point instruction support                                                          | In Progress |
 
 ## Building
-Initially, the following dependencies must be made available:
-- A recent (>=6.5.0) version of [Qt](https://www.qt.io/download) + Qt Charts (**not** bundled with Qt by default, but can be selected during Qt installation)
-- [CMake](https://cmake.org/)
-- `sudo apt-get install libegl1-mesa-dev`
 
-Then, Ripes can be checked out and built as a standard CMake project:
+This fork builds the same way as upstream Ripes — a standard CMake project, with no extra flags needed to enable floating-point support:
+
 ```
-git clone --recursive https://github.com/mortbopet/Ripes.git
+git clone --recursive -b f_extension https://github.com/hpc-ulisboa/Ripes.git
 cd Ripes/
 cmake .
 Unix:               Windows:
 make                jom.exe / nmake.exe / ...
 ```
-Note, that you must have Qt available in your `CMAKE_PREFIX_PATH`. For further information on building Qt projects with CMake, refer to [Qt: Build with CMake](https://doc.qt.io/qt-5/cmake-manual.html).
 
----
-In papers and reports, please refer to Ripes as follows: 'Morten Borup Petersen. Ripes. https://github.com/mortbopet/Ripes' or by referring to the [WCAE'21 paper on the project](https://ieeexplore.ieee.org/document/9707149), e.g. using the following BibTeX code:
+See the [upstream README](https://github.com/mortbopet/Ripes/blob/master/README.md#building) for dependency details (Qt, CMake, etc.).
+
+## Acknowledgements
+
+![image](docs/images/logos.png)
+
+This fork was implement by António Vidais with guidance from Prof. Nuno Roma & Prof. Pedro Tomás. It builds directly on the work of Morten Petersen and the Ripes contributors. Additional thanks to **NLS-04**, whose pull request contributed to this floating-point work.
+
+If you build on the floating-point work in this fork, please also cite the thesis:
+
+```
+@mastersthesis{vidais2026fext,
+  author = {António Cardoso Vidais},
+  title  = {Improving RISC-V Coverage in Ripes Simulator : A Floating-Point Extension},
+  school = {Instituto Superior Técnico, Universidade de Lisboa},
+  year   = {2026},
+  type   = {Master's thesis}
+}
+```
+
+If you use the base simulator in papers or reports, please cite the original project:
+
 ```
 @MISC{Ripes,
 	author = {Morten Borup Petersen},
